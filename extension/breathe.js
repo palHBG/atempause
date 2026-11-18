@@ -138,6 +138,7 @@ async function breathe(n) {
 }
 
 function times(n) { return n === 1 ? 'einmal' : n + ' Mal'; }
+const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 
 async function main() {
   const settings = await P.settings();
@@ -149,7 +150,7 @@ async function main() {
     ? `Willst du ${P.name} wirklich öffnen?`
     : `Heute schon ${times(s.tries)} ${P.name}.`;
   $('subline').textContent = s.backs > 0
-    ? `${times(s.backs)} hast du dich heute dagegen entschieden.`
+    ? `${cap(times(s.backs))} hast du dich heute dagegen entschieden.`
     : 'Spür kurz nach, ob du das gerade wirklich willst.';
   $('btn-go').textContent = `Weiter zu ${P.name}`;
   $('hint').textContent = `Danach ${settings.graceMinutes} Min. ohne Atempause.`;
