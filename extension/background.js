@@ -4,7 +4,7 @@
 
 const DEFAULTS = {
   sites: ['facebook.com', 'youtube.com'],
-  graceMinutes: 10,
+  graceMinutes: 1,
   breaths: 1,
 };
 const ALLOW_BASE = 10000;

@@ -2,7 +2,7 @@
 
 Take one breath before a distracting website or app opens. Same flow as one sec: a breathing
 circle (4 s in, 5 s out), then the question whether you really want to, with today's count.
-"Continue" lets the site or app through for 10 minutes.
+"Continue" lets the site or app through for 1 minute.
 
 - `extension/`: Chrome extension (laptop)
 - `docs/`: the same breathing page as a website for the iPhone, via GitHub Pages:
@@ -34,7 +34,7 @@ New shortcut, named exactly `Atempause`. In its details (i), turn on **Receive: 
 2. **If** *File* **has any value**:
    1. **Get Dates from Input** (input: *File*).
    2. **Get Time Between Dates**: between *Dates* and *Current Date*, in **Minutes**.
-   3. **If** *Time Between Dates* **is less than** `10`: **Stop This Shortcut**.
+   3. **If** *Time Between Dates* **is less than** `1`: **Stop This Shortcut**.
 3. **Open URLs**: `https://palhbg.github.io/atempause/?app=` + *Shortcut Input*
 
 ### Shortcut 2: "Atempause Continue"
@@ -64,7 +64,7 @@ Then turn off one sec on the iPhone for the same apps.
 
 ### Notes
 
-- The free-pass time lives in two places: the shortcut (`10` in step 2.3) and the page. To change
-  it, change both and append `&grace=15` to the URL.
+- The free-pass time lives in two places: the shortcut (`1` in step 2.3) and the page. To change
+  it, change both and append `&grace=5` to the URL.
 - The iPhone counters live in Safari's storage for this page; clearing website data resets them.
 - Every pause opens a Safari tab. Safari settings, **Close Tabs: After One Day** keeps that tidy.

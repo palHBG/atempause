@@ -4,7 +4,7 @@
 
 const INHALE = 4000;
 const EXHALE = 5000;
-const DEFAULT_GRACE = 10;
+const DEFAULT_GRACE = 1;
 const DEFAULT_BREATHS = 1;
 
 // Known iPhone apps: display name and URL scheme to jump back into the app.
