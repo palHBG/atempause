@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Atempause",
+  "description": "Einmal durchatmen, bevor eine ablenkende Website aufgeht.",
+  "version": "1.0.0",
+  "permissions": ["declarativeNetRequestWithHostAccess", "storage", "alarms"],
+  "host_permissions": ["<all_urls>"],
+  "background": { "service_worker": "background.js" },
+  "options_page": "options.html",
+  "action": { "default_popup": "popup.html", "default_title": "Atempause" },
+  "web_accessible_resources": [
+    { "resources": ["breathe.html", "breathe.css", "breathe.js"], "matches": ["<all_urls>"] }
+  ],
+  "icons": { "16": "icons/16.png", "48": "icons/48.png", "128": "icons/128.png" }
+}
