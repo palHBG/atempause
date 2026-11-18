@@ -6,7 +6,7 @@ Atemkreis (4 s ein, 5 s aus), dann die Frage, ob du wirklich willst, mit Zähler
 
 - `extension/`: Chrome-Erweiterung (Laptop)
 - `docs/`: dieselbe Atemseite als Website für das iPhone, über GitHub Pages:
-  `https://palhbg.github.io/atempause/?app=instagram`
+  `https://palhbg.github.io/atempause/?app=youtube`
 - `tools/sync-web.sh`: kopiert die Atemseite aus `extension/` nach `docs/`. Nach jeder Änderung an
   `breathe.*` ausführen.
 
@@ -52,8 +52,8 @@ Die Atemseite ruft diesen Kurzbefehl bei „Weiter“ auf und öffnet danach die
 
 Kurzbefehle, Tab **Automation**, **+**, **App**:
 
-1. App wählen (z. B. Instagram), **Wird geöffnet**, **Sofort ausführen**, Benachrichtigung aus.
-2. Aktion **Text**: `instagram`
+1. App wählen (z. B. YouTube), **Wird geöffnet**, **Sofort ausführen**, Benachrichtigung aus.
+2. Aktion **Text**: `youtube` (bei Facebook: `facebook`)
 3. Aktion **Kurzbefehl ausführen**: `Atempause`, Eingabe: *Text*.
 
 Für jede weitere App wiederholen. Bekannte Kürzel: `instagram`, `tiktok`, `youtube`, `x`,

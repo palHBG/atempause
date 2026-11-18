@@ -1,5 +1,5 @@
 const DEFAULTS = {
-  sites: ['instagram.com', 'facebook.com', 'x.com', 'tiktok.com', 'reddit.com', 'youtube.com'],
+  sites: ['facebook.com', 'youtube.com'],
   graceMinutes: 10,
   breaths: 1,
 };
