@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Atempause",
-  "description": "Einmal durchatmen, bevor eine ablenkende Website aufgeht.",
+  "description": "Take one breath before a distracting website opens.",
   "version": "1.0.0",
   "permissions": ["declarativeNetRequestWithHostAccess", "storage", "alarms"],
   "host_permissions": ["<all_urls>"],

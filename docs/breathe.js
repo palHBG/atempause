@@ -59,7 +59,7 @@ function webAdapter() {
   const p = new URLSearchParams(location.search);
   const key = (p.get('app') || '').toLowerCase();
   const known = APPS[key] || [];
-  const name = p.get('name') || known[0] || key || 'die App';
+  const name = p.get('name') || known[0] || key || 'the app';
   const scheme = p.get('scheme') || known[1] || '';
   const store = 'atempause-stats';
   return {
@@ -74,9 +74,9 @@ function webAdapter() {
     async loadStats() { try { return JSON.parse(localStorage.getItem(store)) || {}; } catch (e) { return {}; } },
     async saveStats(stats) { try { localStorage.setItem(store, JSON.stringify(stats)); } catch (e) {} },
     async go() {
-      // The "Atempause Weiter" shortcut stamps the time, then iOS opens the app via x-success.
+      // The "Atempause Continue" shortcut stamps the time, then iOS opens the app via x-success.
       const url = 'shortcuts://x-callback-url/run-shortcut'
-        + '?name=' + encodeURIComponent('Atempause Weiter')
+        + '?name=' + encodeURIComponent('Atempause Continue')
         + '&input=text&text=' + encodeURIComponent(key)
         + (scheme ? '&x-success=' + encodeURIComponent(scheme) : '');
       location.href = url;
@@ -128,17 +128,16 @@ async function breathe(n) {
   for (let i = 0; i < n; i++) {
     wrap.classList.remove('exhale');
     wrap.classList.add('inhale');
-    say(i === 0 ? 'Atme tief ein' : 'Und noch einmal ein');
+    say(i === 0 ? 'Breathe in deeply' : 'And in once more');
     await wait(INHALE);
     wrap.classList.remove('inhale');
     wrap.classList.add('exhale');
-    say('Und langsam wieder aus');
+    say('And slowly breathe out');
     await wait(EXHALE);
   }
 }
 
-function times(n) { return n === 1 ? 'einmal' : n + ' Mal'; }
-const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+function times(n) { return n === 1 ? 'once' : n === 2 ? 'twice' : n + ' times'; }
 
 async function main() {
   const settings = await P.settings();
@@ -147,13 +146,13 @@ async function main() {
   await breathe(Math.max(1, Math.min(5, settings.breaths)));
 
   $('headline').textContent = s.tries === 1
-    ? `Willst du ${P.name} wirklich öffnen?`
-    : `Heute schon ${times(s.tries)} ${P.name}.`;
+    ? `Do you really want to open ${P.name}?`
+    : `${P.name}, ${times(s.tries)} today.`;
   $('subline').textContent = s.backs > 0
-    ? `${cap(times(s.backs))} hast du dich heute dagegen entschieden.`
-    : 'Spür kurz nach, ob du das gerade wirklich willst.';
-  $('btn-go').textContent = `Weiter zu ${P.name}`;
-  $('hint').textContent = `Danach ${settings.graceMinutes} Min. ohne Atempause.`;
+    ? `You decided against it ${times(s.backs)} today.`
+    : 'Take a moment to notice whether you really want this right now.';
+  $('btn-go').textContent = `Continue to ${P.name}`;
+  $('hint').textContent = `Then ${settings.graceMinutes} min without a pause.`;
   show('choice');
 
   $('btn-back').onclick = async () => {
@@ -161,8 +160,8 @@ async function main() {
     const handled = await P.back();
     if (!handled) {
       $('done-sub').textContent = after.backs === 1
-        ? 'Heute einmal bewusst nicht geöffnet.'
-        : `Heute ${after.backs} Mal bewusst nicht geöffnet.`;
+        ? 'Consciously not opened once today.'
+        : `Consciously not opened ${times(after.backs)} today.`;
       show('done');
     }
   };

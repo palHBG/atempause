@@ -1,70 +1,70 @@
 # Atempause
 
-Einmal durchatmen, bevor eine ablenkende Website oder App aufgeht. Gleicher Ablauf wie one sec:
-Atemkreis (4 s ein, 5 s aus), dann die Frage, ob du wirklich willst, mit Zähler für heute.
-„Weiter“ gibt die Seite oder App für 10 Minuten frei.
+Take one breath before a distracting website or app opens. Same flow as one sec: a breathing
+circle (4 s in, 5 s out), then the question whether you really want to, with today's count.
+"Continue" lets the site or app through for 10 minutes.
 
-- `extension/`: Chrome-Erweiterung (Laptop)
-- `docs/`: dieselbe Atemseite als Website für das iPhone, über GitHub Pages:
+- `extension/`: Chrome extension (laptop)
+- `docs/`: the same breathing page as a website for the iPhone, via GitHub Pages:
   `https://palhbg.github.io/atempause/?app=youtube`
-- `tools/sync-web.sh`: kopiert die Atemseite aus `extension/` nach `docs/`. Nach jeder Änderung an
-  `breathe.*` ausführen.
+- `tools/sync-web.sh`: copies the breathing page from `extension/` to `docs/`. Run it after every
+  change to `breathe.*`.
 
-## Chrome einrichten
+## Chrome setup
 
-1. Ordner `extension/` auf den Laptop holen (Repo klonen oder als ZIP von GitHub laden und entpacken).
-2. In Chrome `chrome://extensions` öffnen, oben rechts **Entwicklermodus** einschalten.
-3. **Entpackte Erweiterung laden** und den Ordner `extension` wählen.
-4. Die Einstellungsseite öffnet sich: Websites eintragen, speichern.
-5. one sec in Chrome deaktivieren, sonst atmest du zweimal.
+1. Get the `extension/` folder onto the laptop (clone the repo, or Code, Download ZIP on GitHub and unzip).
+2. Open `chrome://extensions` in Chrome and switch on **Developer mode** (top right).
+3. Click **Load unpacked** and choose the `extension` folder.
+4. The settings page opens: check the websites (default: facebook.com, youtube.com), save.
+5. Turn off one sec in Chrome, otherwise you breathe twice.
 
-Das Symbol in der Leiste zeigt die Zahlen von heute, die Einstellungen die letzten 7 Tage.
+The toolbar icon shows today's numbers, the settings page the last 7 days.
 
-## iPhone einrichten
+## iPhone setup
 
-Apple lässt keine App andere Apps abfangen. Deshalb läuft es wie bei one sec über die
-Kurzbefehle-App: zwei Kurzbefehle plus eine Automation pro App.
+Apple does not let an app intercept other apps, so this works like one sec does: through the
+Shortcuts app. Two shortcuts plus one automation per app.
 
-### Kurzbefehl 1: „Atempause“
+### Shortcut 1: "Atempause"
 
-Neuer Kurzbefehl, Name genau `Atempause`. Im Info-Bereich (i) **Eingabe empfangen: Text**.
+New shortcut, named exactly `Atempause`. In its details (i), turn on **Receive: Text** input.
 
-1. **Datei aus Ordner abrufen**: Ordner `Shortcuts`, Pfad `atempause/` + Variable
-   *Kurzbefehleingabe* + `.txt`. **Fehler, wenn nicht gefunden** ausschalten.
-2. **Wenn** *Datei* **hat einen Wert**:
-   1. **Daten aus Eingabe abrufen** (Eingabe: *Datei*).
-   2. **Zeit zwischen Datumsangaben abrufen**: zwischen *Daten* und *Aktuelles Datum*, in **Minuten**.
-   3. **Wenn** *Zeit zwischen Datumsangaben* **ist kleiner als** `10`: **Kurzbefehl stoppen**.
-3. **URL öffnen**: `https://palhbg.github.io/atempause/?app=` + *Kurzbefehleingabe*
+1. **Get File from Folder**: folder `Shortcuts`, path `atempause/` + variable *Shortcut Input* +
+   `.txt`. Turn off **Error If Not Found**.
+2. **If** *File* **has any value**:
+   1. **Get Dates from Input** (input: *File*).
+   2. **Get Time Between Dates**: between *Dates* and *Current Date*, in **Minutes**.
+   3. **If** *Time Between Dates* **is less than** `10`: **Stop This Shortcut**.
+3. **Open URLs**: `https://palhbg.github.io/atempause/?app=` + *Shortcut Input*
 
-### Kurzbefehl 2: „Atempause Weiter“
+### Shortcut 2: "Atempause Continue"
 
-Neuer Kurzbefehl, Name genau `Atempause Weiter`. **Eingabe empfangen: Text**.
+New shortcut, named exactly `Atempause Continue`. **Receive: Text** input.
 
-1. **Aktuelles Datum**.
-2. **Datum formatieren**: Format **ISO 8601**.
-3. **Datei sichern**: Ordner `Shortcuts`, Unterpfad `atempause/` + *Kurzbefehleingabe* + `.txt`,
-   **Fragen, wo gesichert werden soll** aus, **Überschreiben** an.
+1. **Current Date**.
+2. **Format Date**: format **ISO 8601**.
+3. **Save File**: folder `Shortcuts`, subpath `atempause/` + *Shortcut Input* + `.txt`,
+   **Ask Where to Save** off, **Overwrite If File Exists** on.
 
-Die Atemseite ruft diesen Kurzbefehl bei „Weiter“ auf und öffnet danach die App.
+The breathing page runs this shortcut on "Continue" and then opens the app.
 
-### Automation pro App
+### One automation per app
 
-Kurzbefehle, Tab **Automation**, **+**, **App**:
+Shortcuts, **Automation** tab, **+**, **App**:
 
-1. App wählen (z. B. YouTube), **Wird geöffnet**, **Sofort ausführen**, Benachrichtigung aus.
-2. Aktion **Text**: `youtube` (bei Facebook: `facebook`)
-3. Aktion **Kurzbefehl ausführen**: `Atempause`, Eingabe: *Text*.
+1. Choose the app (e.g. YouTube), **Is Opened**, **Run Immediately**, notification off.
+2. Action **Text**: `youtube` (for Facebook: `facebook`)
+3. Action **Run Shortcut**: `Atempause`, input: *Text*.
 
-Für jede weitere App wiederholen. Bekannte Kürzel: `instagram`, `tiktok`, `youtube`, `x`,
-`facebook`, `reddit`, `linkedin`, `whatsapp`, `snapchat`, `netflix`, `spiegel`. Für eine andere App
-den URL-Aufruf erweitern: `?app=strava&name=Strava&scheme=strava://`.
+Repeat for each app. Known keys: `instagram`, `tiktok`, `youtube`, `x`, `facebook`, `reddit`,
+`linkedin`, `whatsapp`, `snapchat`, `netflix`, `spiegel`. For any other app extend the URL:
+`?app=strava&name=Strava&scheme=strava://`.
 
-Danach one sec auf dem iPhone für dieselben Apps abschalten.
+Then turn off one sec on the iPhone for the same apps.
 
-### Hinweise
+### Notes
 
-- Die Freigabezeit steht zweimal: im Kurzbefehl (`10` in Schritt 2.3) und auf der Seite. Wer sie
-  ändert, ändert beide und hängt an die URL `&grace=15` an.
-- Die Zähler auf dem iPhone liegen im Safari-Speicher dieser Seite; „Websitedaten löschen“ setzt sie zurück.
-- Jeder Aufruf öffnet einen Safari-Tab. Safari, Einstellungen, **Tabs schließen: nach einem Tag** hält das sauber.
+- The free-pass time lives in two places: the shortcut (`10` in step 2.3) and the page. To change
+  it, change both and append `&grace=15` to the URL.
+- The iPhone counters live in Safari's storage for this page; clearing website data resets them.
+- Every pause opens a Safari tab. Safari settings, **Close Tabs: After One Day** keeps that tidy.

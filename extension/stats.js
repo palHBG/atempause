@@ -16,11 +16,11 @@ async function renderStats(table, days) {
   const rows = Object.entries(sum).sort((a, b) => b[1].tries - a[1].tries);
   table.innerHTML = '';
   if (!rows.length) {
-    table.innerHTML = '<tr><td class="muted">Noch nichts. Gutes Zeichen.</td></tr>';
+    table.innerHTML = '<tr><td class="muted">Nothing yet. Good sign.</td></tr>';
     return;
   }
   const head = table.insertRow();
-  head.innerHTML = '<th>Website</th><th>Versuche</th><th>Nicht geöffnet</th>';
+  head.innerHTML = '<th>Website</th><th>Attempts</th><th>Not opened</th>';
   for (const [site, v] of rows) {
     const r = table.insertRow();
     r.insertCell().textContent = site;

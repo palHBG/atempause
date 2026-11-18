@@ -27,7 +27,7 @@ document.getElementById('save').onclick = async () => {
   await chrome.storage.sync.set({ settings: { sites, graceMinutes, breaths } });
   document.getElementById('sites').value = sites.join('\n');
   const el = document.getElementById('saved');
-  el.textContent = 'Gespeichert.';
+  el.textContent = 'Saved.';
   setTimeout(() => (el.textContent = ''), 2000);
 };
 

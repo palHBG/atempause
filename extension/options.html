@@ -1,35 +1,35 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Atempause Einstellungen</title>
+<title>Atempause Settings</title>
 <link rel="stylesheet" href="ui.css">
 </head>
 <body>
 <main class="page">
   <h1>Atempause</h1>
-  <p class="muted">Bei diesen Websites atmest du erst einmal durch.</p>
+  <p class="muted">Take a breath before these websites open.</p>
 
   <section class="card">
-    <label for="sites">Websites, eine pro Zeile</label>
+    <label for="sites">Websites, one per line</label>
     <textarea id="sites" rows="9" spellcheck="false"></textarea>
-    <p class="muted small">Subdomains sind mit drin: instagram.com deckt auch www.instagram.com ab.</p>
+    <p class="muted small">Subdomains are included: youtube.com also covers www.youtube.com.</p>
 
     <div class="row">
-      <label for="grace">Frei nach „Weiter“ (Minuten)</label>
+      <label for="grace">Free pass after "Continue" (minutes)</label>
       <input id="grace" type="number" min="1" max="240">
     </div>
     <div class="row">
-      <label for="breaths">Atemzüge</label>
+      <label for="breaths">Breaths</label>
       <input id="breaths" type="number" min="1" max="5">
     </div>
-    <button id="save">Speichern</button>
+    <button id="save">Save</button>
     <span id="saved" class="muted small"></span>
   </section>
 
   <section class="card">
-    <h2>Letzte 7 Tage</h2>
+    <h2>Last 7 days</h2>
     <table id="stats"></table>
   </section>
 </main>

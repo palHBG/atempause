@@ -1,6 +1,6 @@
 // Atempause background worker.
 // Every listed site gets a redirect rule to breathe.html (original URL after '#').
-// "Weiter" adds a short-lived allow rule for that site, removed again by an alarm.
+// "Continue" adds a short-lived allow rule for that site, removed again by an alarm.
 
 const DEFAULTS = {
   sites: ['facebook.com', 'youtube.com'],
