@@ -30,6 +30,7 @@ if (-not (Test-Path (Join-Path $dir '.git'))) {
 
 # 3. on-demand updater: desktop shortcut "Update Atempause" (no scheduled task)
 Unregister-ScheduledTask -TaskName 'Atempause Update' -Confirm:$false -ErrorAction SilentlyContinue
+Remove-Item (Join-Path $dir 'tools\update-hidden.vbs') -ErrorAction SilentlyContinue  # left over from the first version
 $cmd = Join-Path $dir 'tools\update.cmd'
 @"
 @echo off
