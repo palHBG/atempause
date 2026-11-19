@@ -19,9 +19,14 @@ irm https://raw.githubusercontent.com/palHBG/atempause/main/tools/windows-setup.
 ```
 
 It puts a git checkout in `%USERPROFILE%\CLAUDE\code\atempause` (installs Git via winget if
-missing) and an **Update Atempause** shortcut on the desktop. Double-click it after a change: it
-pulls from GitHub, and the extension notices the new version on disk within a minute and reloads
-itself. Nothing to unpack or reload by hand.
+missing). After a change, update in PowerShell:
+
+```powershell
+git -C "$env:USERPROFILE\CLAUDE\code\atempause" pull
+```
+
+The extension notices the new version on disk within a minute and reloads itself. Nothing to
+unpack or reload by hand.
 
 Then, once: `chrome://extensions`, **Developer mode** on, **Load unpacked**, choose the
 `extension` folder inside that checkout. Turn off one sec in Chrome.

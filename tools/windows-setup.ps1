@@ -1,6 +1,6 @@
 # Atempause: one-time setup on the Windows laptop.
 # Makes C:\Users\<you>\CLAUDE\code\atempause a git checkout of github.com/palHBG/atempause and
-# puts an "Update Atempause" shortcut on the desktop that pulls the latest version on demand.
+# To update later: git -C "$env:USERPROFILE\CLAUDE\code\atempause" pull
 # The extension notices the new version on disk and reloads itself.
 #
 # Run in PowerShell:
@@ -28,29 +28,16 @@ if (-not (Test-Path (Join-Path $dir '.git'))) {
 & $git -C $dir fetch -q origin main
 & $git -C $dir checkout -q -f -B main origin/main
 
-# 3. on-demand updater: desktop shortcut "Update Atempause" (no scheduled task)
+# 3. clean up helpers from earlier versions of this script (hourly task, desktop shortcut)
 Unregister-ScheduledTask -TaskName 'Atempause Update' -Confirm:$false -ErrorAction SilentlyContinue
-Remove-Item (Join-Path $dir 'tools\update-hidden.vbs') -ErrorAction SilentlyContinue  # left over from the first version
-$cmd = Join-Path $dir 'tools\update.cmd'
-@"
-@echo off
-echo Updating Atempause ...
-"$git" -C "$dir" pull --ff-only
-echo.
-echo Done. Chrome picks up the new version within a minute.
-timeout /t 4 >nul
-"@ | Set-Content -Encoding ASCII $cmd
-$lnk = Join-Path ([Environment]::GetFolderPath('Desktop')) 'Update Atempause.lnk'
-$sc = (New-Object -ComObject WScript.Shell).CreateShortcut($lnk)
-$sc.TargetPath = $cmd
-$sc.WorkingDirectory = $dir
-$sc.IconLocation = Join-Path $dir 'extension\icons\atempause.ico'
-$sc.Save()
+Remove-Item (Join-Path $dir 'tools\update-hidden.vbs'), (Join-Path $dir 'tools\update.cmd') -ErrorAction SilentlyContinue
+Remove-Item (Join-Path ([Environment]::GetFolderPath('Desktop')) 'Update Atempause.lnk') -ErrorAction SilentlyContinue
 
 $version = (Get-Content (Join-Path $dir 'extension\manifest.json') -Raw | ConvertFrom-Json).version
 Write-Host ""
 Write-Host "Done. Atempause $version is in $dir"
-Write-Host "To update later: double-click 'Update Atempause' on the desktop."
+Write-Host "To update later, in PowerShell:"
+Write-Host "  git -C `"$dir`" pull"
 Write-Host "In chrome://extensions load (or keep) this folder:"
 Write-Host "  $dir\extension"
 explorer (Join-Path $dir 'extension')
