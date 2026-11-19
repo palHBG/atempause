@@ -7,16 +7,16 @@ const EXHALE = 5000;
 const DEFAULT_GRACE = 1;
 const DEFAULT_BREATHS = 1;
 
-// Known iPhone apps: display name and URL scheme to jump back into the app.
+// Known iPhone apps: display name, URL scheme, and web link that iOS opens straight in the app.
 const APPS = {
-  instagram: ['Instagram', 'instagram://'],
-  tiktok: ['TikTok', 'tiktok://'],
-  youtube: ['YouTube', 'youtube://'],
-  x: ['X', 'twitter://'],
-  twitter: ['X', 'twitter://'],
-  facebook: ['Facebook', 'fb://'],
-  reddit: ['Reddit', 'reddit://'],
-  linkedin: ['LinkedIn', 'linkedin://'],
+  instagram: ['Instagram', 'instagram://', 'https://www.instagram.com/'],
+  tiktok: ['TikTok', 'tiktok://', 'https://www.tiktok.com/'],
+  youtube: ['YouTube', 'youtube://', 'https://www.youtube.com/'],
+  x: ['X', 'twitter://', 'https://x.com/'],
+  twitter: ['X', 'twitter://', 'https://x.com/'],
+  facebook: ['Facebook', 'fb://', 'https://www.facebook.com/'],
+  reddit: ['Reddit', 'reddit://', 'https://www.reddit.com/'],
+  linkedin: ['LinkedIn', 'linkedin://', 'https://www.linkedin.com/'],
   whatsapp: ['WhatsApp', 'whatsapp://'],
   snapchat: ['Snapchat', 'snapchat://'],
   netflix: ['Netflix', 'nflx://'],
@@ -61,6 +61,10 @@ function webAdapter() {
   const known = APPS[key] || [];
   const name = p.get('name') || known[0] || key || 'the app';
   const scheme = p.get('scheme') || known[1] || '';
+  const link = p.get('link') || known[2] || scheme;
+  // direct=1: the automation already stamped the time, so jump straight into the app
+  // (no Shortcuts round trip, no Shortcuts app flashing up).
+  const direct = p.get('direct') === '1';
   const store = 'atempause-stats';
   return {
     key: key || 'app',
@@ -74,6 +78,7 @@ function webAdapter() {
     async loadStats() { try { return JSON.parse(localStorage.getItem(store)) || {}; } catch (e) { return {}; } },
     async saveStats(stats) { try { localStorage.setItem(store, JSON.stringify(stats)); } catch (e) {} },
     async go() {
+      if (direct && link) { location.href = link; return; }
       // The "Atempause Continue" shortcut stamps the time, then iOS opens the app via x-success.
       const url = 'shortcuts://x-callback-url/run-shortcut'
         + '?name=' + encodeURIComponent('Atempause Continue')
