@@ -2,8 +2,6 @@
 // Every listed site gets a redirect rule to breathe.html (original URL after '#').
 // "Continue" adds a short-lived allow rule for that site. When it runs out, the alarm removes
 // the rule and sends every open tab of that site back to the breathing page.
-// Unpacked install kept current by a git pull on the laptop: a periodic check reloads the
-// extension as soon as the manifest version on disk differs from the running one.
 
 const DEFAULTS = {
   sites: ['facebook.com', 'youtube.com'],
@@ -77,19 +75,10 @@ async function expire(site) {
   }
 }
 
-async function checkForUpdate() {
-  try {
-    const res = await fetch(chrome.runtime.getURL('manifest.json'), { cache: 'no-store' });
-    const onDisk = (await res.json()).version;
-    if (onDisk && onDisk !== chrome.runtime.getManifest().version) chrome.runtime.reload();
-  } catch (e) { /* manifest mid-write during a pull: try again next time */ }
-}
-
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name.startsWith('expire:')) await expire(alarm.name.slice(7));
-  if (alarm.name === 'update-check') await checkForUpdate();
 });
-chrome.alarms.create('update-check', { periodInMinutes: 1 });
+chrome.alarms.clear('update-check'); // left over from 1.1.x
 
 chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (msg && msg.type === 'allow') {

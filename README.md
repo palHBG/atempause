@@ -25,8 +25,7 @@ missing). After a change, update in PowerShell:
 git -C "$env:USERPROFILE\CLAUDE\code\atempause" pull
 ```
 
-The extension notices the new version on disk within a minute and reloads itself. Nothing to
-unpack or reload by hand.
+Then click the reload arrow on Atempause in `chrome://extensions`. Nothing to unpack.
 
 Then, once: `chrome://extensions`, **Developer mode** on, **Load unpacked**, choose the
 `extension` folder inside that checkout. Turn off one sec in Chrome.
@@ -36,8 +35,8 @@ is up, every open tab of that site goes back to the breathing page, even mid-vid
 page sets the slider's starting value; the page remembers your last choice.
 
 Development (on the server): `cp tools/pre-commit .git/hooks/pre-commit` once. The hook copies the
-breathing page to `docs/` and bumps the patch version whenever `extension/` changes, which is what
-the laptop's extension watches for.
+breathing page to `docs/` and bumps the patch version whenever `extension/` changes, so the version
+in `chrome://extensions` shows whether the laptop has the latest.
 
 ## iPhone setup
 

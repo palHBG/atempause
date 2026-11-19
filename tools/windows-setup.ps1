@@ -1,7 +1,7 @@
 # Atempause: one-time setup on the Windows laptop.
 # Makes C:\Users\<you>\CLAUDE\code\atempause a git checkout of github.com/palHBG/atempause and
 # To update later: git -C "$env:USERPROFILE\CLAUDE\code\atempause" pull
-# The extension notices the new version on disk and reloads itself.
+# Then click reload on Atempause in chrome://extensions.
 #
 # Run in PowerShell:
 #   irm https://raw.githubusercontent.com/palHBG/atempause/main/tools/windows-setup.ps1 | iex
