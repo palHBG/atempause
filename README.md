@@ -35,7 +35,13 @@ New shortcut, named exactly `Atempause`. In its details (i), turn on **Receive: 
    1. **Get Dates from Input** (input: *File*).
    2. **Get Time Between Dates**: between *Dates* and *Current Date*, in **Minutes**.
    3. **If** *Time Between Dates* **is less than** `1`: **Stop This Shortcut**.
-3. **Open URLs**: `https://palhbg.github.io/atempause/?app=` + *Shortcut Input*
+3. **Current Date**, **Format Date** as ISO 8601 (with time), **Save File** to `Shortcuts`, subpath
+   `atempause/` + *Shortcut Input* + `.txt`, Ask Where to Save off, Overwrite on.
+4. **Open URLs**: `https://palhbg.github.io/atempause/?app=` + *Shortcut Input* + `&direct=1`
+
+With `&direct=1`, "Continue" jumps straight into the app via its web link, so the Shortcuts app
+does not flash up. The free minute then counts from the moment the pause starts. Shortcut 2 below
+is only needed without `&direct=1`.
 
 ### Shortcut 2: "Atempause Continue"
 
