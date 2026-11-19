@@ -1,6 +1,6 @@
 # Atempause: one-time setup on the Windows laptop.
 # Makes C:\Users\<you>\CLAUDE\code\atempause a git checkout of github.com/palHBG/atempause and
-# registers a hidden scheduled task that pulls updates at logon and every hour.
+# puts an "Update Atempause" shortcut on the desktop that pulls the latest version on demand.
 # The extension notices the new version on disk and reloads itself.
 #
 # Run in PowerShell:
@@ -28,23 +28,28 @@ if (-not (Test-Path (Join-Path $dir '.git'))) {
 & $git -C $dir fetch -q origin main
 & $git -C $dir checkout -q -f -B main origin/main
 
-# 3. hidden updater (wscript runs git without a console window popping up)
-$vbs = Join-Path $dir 'tools\update-hidden.vbs'
+# 3. on-demand updater: desktop shortcut "Update Atempause" (no scheduled task)
+Unregister-ScheduledTask -TaskName 'Atempause Update' -Confirm:$false -ErrorAction SilentlyContinue
+$cmd = Join-Path $dir 'tools\update.cmd'
 @"
-CreateObject("WScript.Shell").Run """$git"" -C ""$dir"" pull -q --ff-only", 0, True
-"@ | Set-Content -Encoding ASCII $vbs
-
-$action   = New-ScheduledTaskAction -Execute 'wscript.exe' -Argument "`"$vbs`""
-$atLogon  = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
-$hourly   = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Hours 1)
-$settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
-Register-ScheduledTask -TaskName 'Atempause Update' -Action $action -Trigger $atLogon, $hourly `
-    -Settings $settings -Description 'Pulls the Atempause Chrome extension from GitHub' -Force | Out-Null
+@echo off
+echo Updating Atempause ...
+"$git" -C "$dir" pull --ff-only
+echo.
+echo Done. Chrome picks up the new version within a minute.
+timeout /t 4 >nul
+"@ | Set-Content -Encoding ASCII $cmd
+$lnk = Join-Path ([Environment]::GetFolderPath('Desktop')) 'Update Atempause.lnk'
+$sc = (New-Object -ComObject WScript.Shell).CreateShortcut($lnk)
+$sc.TargetPath = $cmd
+$sc.WorkingDirectory = $dir
+$sc.IconLocation = Join-Path $dir 'extension\icons\atempause.ico'
+$sc.Save()
 
 $version = (Get-Content (Join-Path $dir 'extension\manifest.json') -Raw | ConvertFrom-Json).version
 Write-Host ""
 Write-Host "Done. Atempause $version is in $dir"
-Write-Host "Updates are pulled at logon and every hour (task 'Atempause Update')."
+Write-Host "To update later: double-click 'Update Atempause' on the desktop."
 Write-Host "In chrome://extensions load (or keep) this folder:"
 Write-Host "  $dir\extension"
 explorer (Join-Path $dir 'extension')

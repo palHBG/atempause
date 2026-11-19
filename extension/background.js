@@ -89,7 +89,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name.startsWith('expire:')) await expire(alarm.name.slice(7));
   if (alarm.name === 'update-check') await checkForUpdate();
 });
-chrome.alarms.create('update-check', { periodInMinutes: 5 });
+chrome.alarms.create('update-check', { periodInMinutes: 1 });
 
 chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (msg && msg.type === 'allow') {
