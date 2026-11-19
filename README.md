@@ -12,13 +12,27 @@ circle (4 s in, 5 s out), then the question whether you really want to, with tod
 
 ## Chrome setup
 
-1. Get the `extension/` folder onto the laptop (clone the repo, or Code, Download ZIP on GitHub and unzip).
-2. Open `chrome://extensions` in Chrome and switch on **Developer mode** (top right).
-3. Click **Load unpacked** and choose the `extension` folder.
-4. The settings page opens: check the websites (default: facebook.com, youtube.com), save.
-5. Turn off one sec in Chrome, otherwise you breathe twice.
+One-time, in PowerShell on the laptop:
 
-The toolbar icon shows today's numbers, the settings page the last 7 days.
+```powershell
+irm https://raw.githubusercontent.com/palHBG/atempause/main/tools/windows-setup.ps1 | iex
+```
+
+It puts a git checkout in `%USERPROFILE%\CLAUDE\code\atempause` (installs Git via winget if
+missing) and registers the hidden task "Atempause Update", which pulls from GitHub at logon and
+every hour. The extension checks every 5 minutes whether the version on disk is newer and then
+reloads itself. Nothing to unpack or reload by hand.
+
+Then, once: `chrome://extensions`, **Developer mode** on, **Load unpacked**, choose the
+`extension` folder inside that checkout. Turn off one sec in Chrome.
+
+On the breathing page a slider (1 to 15 minutes) sets how long the site stays open. When the time
+is up, every open tab of that site goes back to the breathing page, even mid-video. The settings
+page sets the slider's starting value; the page remembers your last choice.
+
+Development (on the server): `cp tools/pre-commit .git/hooks/pre-commit` once. The hook copies the
+breathing page to `docs/` and bumps the patch version whenever `extension/` changes, which is what
+the laptop's extension watches for.
 
 ## iPhone setup
 

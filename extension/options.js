@@ -22,7 +22,7 @@ async function load() {
 
 document.getElementById('save').onclick = async () => {
   const sites = [...new Set(document.getElementById('sites').value.split('\n').map(clean).filter((d) => d.includes('.')))];
-  const graceMinutes = Math.min(240, Math.max(1, Number(document.getElementById("grace").value) || 1));
+  const graceMinutes = Math.min(15, Math.max(1, Number(document.getElementById("grace").value) || 1));
   const breaths = Math.min(5, Math.max(1, Number(document.getElementById('breaths').value) || 1));
   await chrome.storage.sync.set({ settings: { sites, graceMinutes, breaths } });
   document.getElementById('sites').value = sites.join('\n');

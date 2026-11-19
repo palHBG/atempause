@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Git pre-commit hook (install: cp tools/pre-commit .git/hooks/pre-commit).
+# When anything in extension/ changes: copy the breathing page to docs/ and bump the patch
+# version, so the laptop's extension sees a new version on disk and reloads itself.
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+changed=$(git diff --cached --name-only -- extension/ | grep -v '^extension/manifest.json$' || true)
+[ -z "$changed" ] && exit 0
+./tools/sync-web.sh
+python3 - <<'EOF'
+import json, re
+f = 'extension/manifest.json'
+s = open(f, encoding='utf-8').read()
+v = json.loads(s)['version'].split('.')
+v[-1] = str(int(v[-1]) + 1)
+s = re.sub(r'"version": "[^"]+"', '"version": "%s"' % '.'.join(v), s, count=1)
+open(f, 'w', encoding='utf-8').write(s)
+print('atempause: version ->', '.'.join(v))
+EOF
+git add extension/manifest.json docs/

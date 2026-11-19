@@ -83,3 +83,8 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .inhale .orb, .exhale .orb, .inhale .halo, .exhale .halo { transition-timing-function: linear; }
 }
+
+.slider { margin-top: 30px; width: min(320px, 100%); color: var(--muted); font-size: 15px; }
+.slider strong { color: var(--fg); font-weight: 600; }
+.slider input { width: 100%; margin-top: 10px; accent-color: var(--orb2); }
+.slider + .actions { margin-top: 22px; }

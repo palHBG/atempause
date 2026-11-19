@@ -42,6 +42,9 @@ function extensionAdapter() {
     },
     async loadStats() { return (await chrome.storage.local.get('stats')).stats || {}; },
     async saveStats(stats) { await chrome.storage.local.set({ stats }); },
+    slider: true,
+    async lastGrace() { return (await chrome.storage.local.get('lastGrace')).lastGrace; },
+    async saveGrace(m) { await chrome.storage.local.set({ lastGrace: m }); },
     async go(minutes) {
       await chrome.runtime.sendMessage({ type: 'allow', host, minutes });
       location.replace(target);
@@ -157,7 +160,19 @@ async function main() {
     ? `You decided against it ${times(s.backs)} today.`
     : 'Take a moment to notice whether you really want this right now.';
   $('btn-go').textContent = `Continue to ${P.name}`;
-  $('hint').textContent = `Then ${settings.graceMinutes} min without a pause.`;
+  let grace = settings.graceMinutes;
+  if (P.slider) {
+    grace = Math.min(15, Math.max(1, Number(await P.lastGrace()) || settings.graceMinutes));
+    const range = $('grace');
+    const label = () => ($('grace-val').textContent = grace === 1 ? '1 minute' : grace + ' minutes');
+    range.value = grace;
+    label();
+    range.oninput = () => { grace = Number(range.value); label(); };
+    $('slider').hidden = false;
+    $('hint').textContent = 'Then the breathing pause comes back, even mid-video.';
+  } else {
+    $('hint').textContent = `Then ${grace} min without a pause.`;
+  }
   show('choice');
 
   $('btn-back').onclick = async () => {
@@ -170,7 +185,10 @@ async function main() {
       show('done');
     }
   };
-  $('btn-go').onclick = () => P.go(settings.graceMinutes);
+  $('btn-go').onclick = async () => {
+    if (P.slider) await P.saveGrace(grace);
+    P.go(grace);
+  };
 }
 
 main();

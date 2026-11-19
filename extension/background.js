@@ -1,6 +1,9 @@
 // Atempause background worker.
 // Every listed site gets a redirect rule to breathe.html (original URL after '#').
-// "Continue" adds a short-lived allow rule for that site, removed again by an alarm.
+// "Continue" adds a short-lived allow rule for that site. When it runs out, the alarm removes
+// the rule and sends every open tab of that site back to the breathing page.
+// Unpacked install kept current by a git pull on the laptop: a periodic check reloads the
+// extension as soon as the manifest version on disk differs from the running one.
 
 const DEFAULTS = {
   sites: ['facebook.com', 'youtube.com'],
@@ -36,7 +39,9 @@ async function syncRules() {
   // site list changed: drop all running free passes, their ids may no longer match
   const session = await chrome.declarativeNetRequest.getSessionRules();
   await chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds: session.map((r) => r.id) });
-  await chrome.alarms.clearAll();
+  for (const a of await chrome.alarms.getAll()) {
+    if (a.name.startsWith('expire:')) await chrome.alarms.clear(a.name);
+  }
 }
 
 async function allow(host, minutes) {
@@ -53,14 +58,38 @@ async function allow(host, minutes) {
       condition: { requestDomains: [sites[idx]], resourceTypes: ['main_frame'] },
     }],
   });
-  await chrome.alarms.create('expire:' + id, { when: Date.now() + Math.max(1, minutes) * 60000 });
+  await chrome.alarms.create('expire:' + sites[idx], { when: Date.now() + Math.max(1, minutes) * 60000 });
+}
+
+async function expire(site) {
+  const { sites } = await getSettings();
+  const idx = sites.indexOf(site);
+  if (idx >= 0) {
+    await chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds: [ALLOW_BASE + idx] });
+  }
+  const page = chrome.runtime.getURL('breathe.html');
+  for (const tab of await chrome.tabs.query({})) {
+    let host = '';
+    try { host = new URL(tab.url).hostname; } catch (e) { continue; }
+    if (host === site || host.endsWith('.' + site)) {
+      chrome.tabs.update(tab.id, { url: page + '#' + tab.url });
+    }
+  }
+}
+
+async function checkForUpdate() {
+  try {
+    const res = await fetch(chrome.runtime.getURL('manifest.json'), { cache: 'no-store' });
+    const onDisk = (await res.json()).version;
+    if (onDisk && onDisk !== chrome.runtime.getManifest().version) chrome.runtime.reload();
+  } catch (e) { /* manifest mid-write during a pull: try again next time */ }
 }
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
-  if (!alarm.name.startsWith('expire:')) return;
-  const id = Number(alarm.name.slice(7));
-  await chrome.declarativeNetRequest.updateSessionRules({ removeRuleIds: [id] });
+  if (alarm.name.startsWith('expire:')) await expire(alarm.name.slice(7));
+  if (alarm.name === 'update-check') await checkForUpdate();
 });
+chrome.alarms.create('update-check', { periodInMinutes: 5 });
 
 chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (msg && msg.type === 'allow') {
